@@ -8,6 +8,7 @@ public class App {
         System.out.println("Maven build is working successfully.");
         System.out.println("Jenkins build is working successfully.");
         System.out.println("Jenkins Poll SCM Test"); 
+    
 
     }
 }
