@@ -1,0 +1,34 @@
+pipeline {
+    agent any
+
+    stages {
+
+        stage('Maven Build') {
+            steps {
+                bat '''
+                    cd docker-jenkins-cicd\\docker-jenkins-cicd
+                    mvn clean test package
+                '''
+            }
+        }
+
+        stage('Docker Build') {
+            steps {
+                bat '''
+                    cd docker-jenkins-cicd\\docker-jenkins-cicd
+                    docker build -t zainul-cicd-app .
+                '''
+            }
+        }
+
+        stage('Docker Run') {
+            steps {
+                bat '''
+                    docker stop zainul-cicd-container 2>nul
+                    docker rm zainul-cicd-container 2>nul
+                    docker run --name zainul-cicd-container zainul-cicd-app
+                '''
+            }
+        }
+    }
+}
