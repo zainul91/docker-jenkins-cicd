@@ -30,5 +30,12 @@ pipeline {
                 '''
             }
         }
+
+        stage('Deploy') {
+            steps {
+                echo 'Application deployment completed successfully!'
+            }
+        }
+
     }
 }
