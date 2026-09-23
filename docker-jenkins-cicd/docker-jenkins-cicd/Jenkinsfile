@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    environment {
+        DEMO_USER = credentials('demo-credentials')
+    }
+
     stages {
 
         stage('Maven Build') {
