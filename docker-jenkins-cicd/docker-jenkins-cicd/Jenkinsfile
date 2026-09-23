@@ -1,3 +1,4 @@
+```groovy
 pipeline {
     agent any
 
@@ -10,7 +11,7 @@ pipeline {
         stage('Maven Build') {
             steps {
                 bat '''
-                    cd docker-jenkins-cicd\\docker-jenkins-cicd
+                    cd docker-jenkins-cicd
                     mvn clean test package
                 '''
             }
@@ -28,7 +29,7 @@ pipeline {
         stage('Docker Build') {
             steps {
                 bat '''
-                    cd docker-jenkins-cicd\\docker-jenkins-cicd
+                    cd docker-jenkins-cicd
                     docker build -t zainul-cicd-app .
                 '''
             }
@@ -52,3 +53,4 @@ pipeline {
 
     }
 }
+```
