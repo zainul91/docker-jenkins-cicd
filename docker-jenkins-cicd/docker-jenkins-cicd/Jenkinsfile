@@ -16,6 +16,15 @@ pipeline {
             }
         }
 
+        stage('Credential Test') {
+            steps {
+                bat '''
+                    echo Username is: %DEMO_USER_USR%
+                    echo Password is: [HIDDEN]
+                '''
+            }
+        }
+
         stage('Docker Build') {
             steps {
                 bat '''
