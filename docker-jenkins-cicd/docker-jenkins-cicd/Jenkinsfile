@@ -1,55 +1,59 @@
 pipeline {
-    agent any
+agent any
 
-    environment {
-        DEMO_USER = credentials('demo-credentials')
+```
+stages {
+
+    stage('Maven Build') {
+        steps {
+            bat '''
+                cd docker-jenkins-cicd
+                mvn clean test package
+            '''
+        }
     }
 
-    stages {
-
-        stage('Maven Build') {
-            steps {
+    stage('Credential Test') {
+        steps {
+            withCredentials([usernamePassword(
+                credentialsId: 'demo-credentials',
+                usernameVariable: 'DEMO_USERNAME',
+                passwordVariable: 'DEMO_PASSWORD'
+            )]) {
                 bat '''
-                    cd docker-jenkins-cicd
-                    mvn clean test package
-                '''
-            }
-        }
-
-        stage('Credential Test') {
-            steps {
-                bat '''
-                    echo Username is: %DEMO_USER_USR%
+                    echo Username is: %DEMO_USERNAME%
                     echo Password is: [HIDDEN]
                 '''
             }
         }
-
-        stage('Docker Build') {
-            steps {
-                bat '''
-                    cd docker-jenkins-cicd
-                    docker build -t zainul-cicd-app .
-                '''
-            }
-        }
-
-        stage('Docker Run') {
-            steps {
-                bat '''
-                    docker stop zainul-cicd-container 2>nul
-                    docker rm zainul-cicd-container 2>nul
-                    docker run --name zainul-cicd-container zainul-cicd-app
-                '''
-            }
-        }
-
-        stage('Deploy') {
-            steps {
-                echo 'Application deployment completed successfully!'
-            }
-        }
-
     }
-}
 
+    stage('Docker Build') {
+        steps {
+            bat '''
+                cd docker-jenkins-cicd
+                docker build -t zainul-cicd-app .
+            '''
+        }
+    }
+
+    stage('Docker Run') {
+        steps {
+            bat '''
+                docker stop zainul-cicd-container 2>nul
+                docker rm zainul-cicd-container 2>nul
+                docker run --name zainul-cicd-container zainul-cicd-app
+            '''
+        }
+    }
+
+    stage('Deploy') {
+        steps {
+            echo 'Application deployment completed successfully!'
+        }
+    }
+
+}
+```
+
+}
